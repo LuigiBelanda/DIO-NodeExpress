@@ -27,7 +27,8 @@ const saveUser = (users) => {
 // criando a função que toma conta da rota
 const userRoutes = (app) => {
   // criando a rota em si passando como param o ID do user
-  app.route("/users/:id?")
+  app
+    .route("/users/:id?")
     .get((req, res) => {
       const users = getUsers();
 
@@ -47,10 +48,10 @@ const userRoutes = (app) => {
 
     .put((req, res) => {
       const users = getUsers();
-
+      
       saveUser(
         // percorrendo os dados com map
-        users.map(user => {
+        users.map((user) => {
           // vendo se o id do user que queremos é o mesmo que passamos na req
           if (user.id === req.params.id) {
             return {
@@ -64,7 +65,14 @@ const userRoutes = (app) => {
 
         res.status(200).send("OK")
       );
+    })
 
+    .delete((req, res) => {
+      const users = getUsers();
+
+      saveUser(users.filter((user) => user.id !== req.params.id));
+
+      res.status(200).send("OK");
     });
 };
 
