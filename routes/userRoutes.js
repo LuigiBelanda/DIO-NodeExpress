@@ -29,10 +29,43 @@ const userRoutes = (app) => {
   // criando a rota em si passando como param o ID do user
   app.route("/users/:id?")
     .get((req, res) => {
-        const users = getUsers();
+      const users = getUsers();
 
-        res.send({ users });
+      res.send({ users });
     })
+
+    .post((req, res) => {
+      const users = getUsers();
+
+      console.log("Dados da requisição:", req.body);
+
+      users.push(req.body);
+      saveUser(users);
+
+      return res.status(201).send("OK");
+    })
+
+    .put((req, res) => {
+      const users = getUsers();
+
+      saveUser(
+        // percorrendo os dados com map
+        users.map(user => {
+          // vendo se o id do user que queremos é o mesmo que passamos na req
+          if (user.id === req.params.id) {
+            return {
+              ...user,
+              ...req.body,
+            };
+          }
+
+          return user;
+        }),
+
+        res.status(200).send("OK")
+      );
+
+    });
 };
 
 module.exports = userRoutes;

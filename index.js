@@ -1,11 +1,17 @@
 const userRoutes = require("./routes/userRoutes");
-
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
 const port = 3000;
 
-// passando o express como dependência 
+// usando o body-parser
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// falando que iremos usar algo em JSON
+app.use(express.json());
+
+// passando o express como dependência
 userRoutes(app);
 
 // rota
